@@ -1,1 +1,432 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Una cita ❤️</title><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#08060a;color:#fff;font-family:Georgia,serif;display:flex;align-items:center;justify-content:center;padding:20px}.card{width:min(92vw,500px);padding:28px;border-radius:24px;background:#ffffff12;border:1px solid #ffffff25;text-align:center}button,input,select{font:17px Georgia,serif}button{border:0;border-radius:999px;padding:13px 24px;cursor:pointer}#yes,#confirm{background:#ff4d6d;color:#fff}#no{background:#eee;color:#222}.buttons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}#form,#result{display:none;text-align:left}.row{margin:15px 0}label{display:block;margin-bottom:7px}input,select{width:100%;padding:13px;border-radius:12px;border:1px solid #aaa;background:#fff;color:#222}#confirm{width:100%;margin-top:8px}.center{text-align:center}</style></head><body><div class="card" id="start"><h1 id="q">Lele, ¿querés tener una cita conmigo? ❤️</h1><div class="buttons"><button id="yes">Sí ❤️</button><button id="no">No</button></div></div><div class="card" id="form"><h1>Entonces tenemos una cita 🥰</h1><div class="row"><label>Día 📅</label><input id="date" type="date"></div><div class="row"><label>Hora 🕐</label><input id="time" type="time"></div><div class="row"><label>¿Qué te gustaría hacer? 💭</label><select id="activity"><option value="">Elegí una opción...</option><option>🍕 Comer algo</option><option>🎬 Ver una película</option><option>☕ Tomar algo</option><option>🚶 Salir a caminar</option><option>🏀 Hacer algo juntos</option><option>💭 Lo que vos quieras</option></select></div><button id="confirm">Confirmar nuestra cita ❤️</button><p id="status"></p></div><div class="card center" id="result"><h1>¡Cita confirmada! ❤️</h1><p id="summary"></p><p>Ya estoy esperando verte, Lele 🥰</p></div><script>const s=document.getElementById("start"),f=document.getElementById("form"),r=document.getElementById("result"),q=document.getElementById("q"),yes=document.getElementById("yes"),no=document.getElementById("no"),confirm=document.getElementById("confirm"),date=document.getElementById("date"),time=document.getElementById("time"),activity=document.getElementById("activity"),summary=document.getElementById("summary"),status=document.getElementById("status");let n=0;no.onclick=()=>{n++;q.textContent=n===1?"¿Segura? 👀":n===2?"Creo que querías apretar que sí 😌":"Ese botón sigue sin funcionar 😂❤️";no.style.transform=`translate(${(Math.random()-.5)*100}px,${(Math.random()-.5)*50}px)`};yes.onclick=()=>{s.style.display="none";f.style.display="block"};confirm.onclick=()=>{if(!date.value||!time.value||!activity.value){status.textContent="Elegí el día, la hora y qué te gustaría hacer ❤️";return}let p=date.value.split("-"),d={date:p[2]+"/"+p[1]+"/"+p[0],time:time.value,activity:activity.value};localStorage.setItem("citaLele",JSON.stringify(d));summary.innerHTML=`📅 <b>${d.date}</b><br>🕐 <b>${d.time}</b><br>💭 <b>${d.activity}</b>`;f.style.display="none";r.style.display="block"};</script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Una cita ❤️</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:#08060a;
+  color:#fff;
+  font-family:Georgia,serif;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.card{
+  width:min(92vw,500px);
+  padding:28px;
+  border-radius:24px;
+  background:#ffffff12;
+  border:1px solid #ffffff25;
+  text-align:center;
+  box-shadow:0 20px 60px #0008;
+}
+
+h1{
+  font-weight:normal;
+  font-size:clamp(26px,7vw,40px);
+}
+
+button,input,select{
+  font:17px Georgia,serif;
+}
+
+button{
+  border:0;
+  border-radius:999px;
+  padding:13px 24px;
+  cursor:pointer;
+}
+
+#yes,#confirm{
+  background:#ff4d6d;
+  color:#fff;
+}
+
+#no{
+  background:#eee;
+  color:#222;
+}
+
+.buttons{
+  display:flex;
+  gap:14px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+#form,#result{
+  display:none;
+  text-align:left;
+}
+
+.row{
+  margin:15px 0;
+}
+
+label{
+  display:block;
+  margin-bottom:7px;
+}
+
+input,select{
+  width:100%;
+  padding:13px;
+  border-radius:12px;
+  border:1px solid #aaa;
+  background:#fff;
+  color:#222;
+}
+
+#confirm{
+  width:100%;
+  margin-top:8px;
+}
+
+.center{
+  text-align:center;
+}
+
+#status{
+  text-align:center;
+  min-height:20px;
+  margin-top:12px;
+  font-size:14px;
+  opacity:.85;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="start">
+
+<h1 id="question">
+Lele, ¿querés tener una cita conmigo? ❤️
+</h1>
+
+<div class="buttons">
+<button id="yes" type="button">Sí ❤️</button>
+<button id="no" type="button">No</button>
+</div>
+
+</div>
+
+
+<div class="card" id="form">
+
+<h1>
+Entonces tenemos una cita 🥰
+</h1>
+
+<div class="row">
+<label for="date">Día 📅</label>
+<input id="date" type="date">
+</div>
+
+<div class="row">
+<label for="time">Hora 🕐</label>
+<input id="time" type="time">
+</div>
+
+<div class="row">
+
+<label for="activity">
+¿Qué te gustaría hacer? 💭
+</label>
+
+<select id="activity">
+
+<option value="">
+Elegí una opción...
+</option>
+
+<option>
+🍕 Comer algo
+</option>
+
+<option>
+🎬 Ver una película
+</option>
+
+<option>
+☕ Tomar algo
+</option>
+
+<option>
+🚶 Salir a caminar
+</option>
+
+<option>
+🏀 Hacer algo juntos
+</option>
+
+<option>
+💭 Lo que vos quieras
+</option>
+
+</select>
+
+</div>
+
+<button id="confirm" type="button">
+Confirmar nuestra cita ❤️
+</button>
+
+<div id="status"></div>
+
+</div>
+
+
+<div class="card center" id="result">
+
+<h1>
+¡Cita confirmada! ❤️
+</h1>
+
+<p id="summary"></p>
+
+<p>
+Ya estoy esperando verte, Lele 🥰
+</p>
+
+</div>
+
+
+<script>
+
+const endpoint =
+"https://formspree.io/f/xvkpqola";
+
+
+const start =
+document.getElementById("start");
+
+const form =
+document.getElementById("form");
+
+const result =
+document.getElementById("result");
+
+const question =
+document.getElementById("question");
+
+const yes =
+document.getElementById("yes");
+
+const no =
+document.getElementById("no");
+
+const confirmBtn =
+document.getElementById("confirm");
+
+const date =
+document.getElementById("date");
+
+const time =
+document.getElementById("time");
+
+const activity =
+document.getElementById("activity");
+
+const summary =
+document.getElementById("summary");
+
+const status =
+document.getElementById("status");
+
+
+let noClicks = 0;
+
+
+no.addEventListener("click", () => {
+
+noClicks++;
+
+if(noClicks === 1){
+
+question.textContent =
+"¿Segura? 👀";
+
+}
+
+else if(noClicks === 2){
+
+question.textContent =
+"Creo que querías apretar que sí 😌";
+
+}
+
+else{
+
+question.textContent =
+"Ese botón sigue sin funcionar 😂❤️";
+
+}
+
+no.style.transform =
+`translate(
+${(Math.random()-.5)*100}px,
+${(Math.random()-.5)*50}px
+)`;
+
+});
+
+
+yes.addEventListener("click", () => {
+
+start.style.display = "none";
+
+form.style.display = "block";
+
+});
+
+
+confirmBtn.addEventListener("click", async () => {
+
+
+if(!date.value ||
+   !time.value ||
+   !activity.value){
+
+status.textContent =
+"Elegí el día, la hora y qué te gustaría hacer ❤️";
+
+return;
+
+}
+
+
+const parts =
+date.value.split("-");
+
+
+const chosenDate =
+`${parts[2]}/${parts[1]}/${parts[0]}`;
+
+const chosenTime =
+time.value;
+
+const chosenActivity =
+activity.value;
+
+
+confirmBtn.disabled = true;
+
+status.textContent =
+"Guardando nuestra cita... ❤️";
+
+
+const data =
+new FormData();
+
+
+data.append(
+"Asunto",
+"❤️ Lele aceptó la cita"
+);
+
+data.append(
+"Día",
+chosenDate
+);
+
+data.append(
+"Hora",
+chosenTime
+);
+
+data.append(
+"Actividad",
+chosenActivity
+);
+
+data.append(
+"Mensaje",
+"Lele confirmó la cita desde la página."
+);
+
+
+try{
+
+const response =
+await fetch(
+endpoint,
+{
+method:"POST",
+
+headers:{
+"Accept":
+"application/json"
+},
+
+body:data
+}
+);
+
+
+if(!response.ok){
+
+throw new Error(
+"Formspree error"
+);
+
+}
+
+
+localStorage.setItem(
+"citaLele",
+
+JSON.stringify({
+
+date:chosenDate,
+
+time:chosenTime,
+
+activity:chosenActivity
+
+})
+
+);
+
+
+summary.innerHTML =
+
+`📅 <b>${chosenDate}</b><br>
+🕐 <b>${chosenTime}</b><br>
+💭 <b>${chosenActivity}</b>`;
+
+
+form.style.display =
+"none";
+
+result.style.display =
+"block";
+
+
+}
+
+catch(error){
+
+confirmBtn.disabled =
+false;
+
+status.textContent =
+"No pude guardar la cita. Revisá tu conexión e intentá de nuevo ❤️";
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
